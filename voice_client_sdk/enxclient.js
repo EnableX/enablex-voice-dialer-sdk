@@ -8,7 +8,7 @@ var dialer = new EnxDialer('http://127.0.0.1:8444/', user_data);
 	rejectUnauthorized :false
 }
 */
-dialer.init('https://10.100.1.10:8444');
+dialer.init('https://api.enablex.io:8444');
 let params = { 
   name: 'ENABLEX TEST APP', 
   owner_ref: 'enablex', 

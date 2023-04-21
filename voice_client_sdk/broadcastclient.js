@@ -9,19 +9,12 @@ var dialer = new EnxDialer('http://127.0.0.1:8444/', user_data);
 	rejectUnauthorized :false
 }
 */
-dialer.init('https://10.100.1.10:8444');
-//dialer.init();
-//dialer.login(user_data);
-//dialer.handleVoiceEvents();
-/*dialer.connectCall({"from":"12028528186", "to":"918088394833", "room":"6024df4615081f57abba00a3"}, (response) => {
-    console.log("Received response " + JSON.stringify(response));
-    if(response.result === 0 && response.state === 'initiated') dialer.cancelCall(response.voice_id);
-});*/
+dialer.init('https://api.enablex.io:8444');
 let params = {
   name: "VOICE BROADCAST APP",
   owner_ref : "ENABLEX",
-  broadcast_numbers : "[{\"phone\":\"918088394833\"},{\"phone\":\"939972972207\"},{\"phone\":\"14435721398\"},{\"phone\":\"14435721387\"},{\"phone\":\"14435721386\"}]",
-  from: "12028528186",
+  broadcast_numbers : "[{\"phone\":\"91xxxxxxxxxx\"},{\"phone\":\"93xxxxxxxxxx\"},{\"phone\":\"14xxxxxxxxxx\"},{\"phone\":\"14xxxxxxxxxx\"},{\"phone\":\"14xxxxxxxxxx\"}]",
+  from: "callerid",
   action_on_connect: {
     play: {
       text : "Welcome to Voice Broadcast testing",
@@ -34,12 +27,9 @@ let params = {
     IntervalBetweenRetries: 5000,
     NumberOfRetries: 3
   },
-  //event_url: "http://10.100.1.10:3000/event",
-  //"call_handler_url": "http://10.100.1.10:3000/event"
 }
 
-dialer.makeBroadcastCall('63746c5004b80100105ed7d3','eraMavyjeSymubaTyJyNyruBa5eDaUeSebez',params, (response) => {
-//dialer.makeOutboundCall('5e707188e865dc5b724b28e2', 'uMeVany7aPapetamy8uZyMeSuSymyeytaJaN', params,(response) => {
+dialer.makeBroadcastCall('appid','appkey',params, (response) => {
   console.log("Received response " + JSON.stringify(response));
 });
 
@@ -74,7 +64,7 @@ dialer.socket.on("callstateevent", function (data) {
     console.log("Dispatching call bridged notification to the app");
     dialer.emit('bridged', data);
     setTimeout(() => {
-      dialer.disconnectBroadCastCall('63746c5004b80100105ed7d3','eraMavyjeSymubaTyJyNyruBa5eDaUeSebez',data.broadcast_id, data.voice_id,(response) => {
+      dialer.disconnectBroadCastCall('appid','appkey',data.broadcast_id, data.voice_id,(response) => {
         console.log(`Disconnect Call Response ${JSON.stringify(response)}`);
       });
     }, 10000);
@@ -104,24 +94,24 @@ dialer.socket.on("callstateevent", function (data) {
         prompt_ref: 'disconnect_prompt'
       };*/
       let connectParams = {
-        from : '12028528186',
-        to : '919972972207'
+        from : 'callerid',
+        to : '91xxxxxxxxxx'
       };
-      /*dialer.playBroadCastIVR('63746c5004b80100105ed7d3','eraMavyjeSymubaTyJyNyruBa5eDaUeSebez', data.broadcast_id, data.voice_id , playParams, (response) => {
+      /*dialer.playBroadCastIVR('appid','appkey', data.broadcast_id, data.voice_id , playParams, (response) => {
         console.log("play IVR response " + JSON.stringify(response));
       });*/
-      /*dialer.joinRoom('63746c5004b80100105ed7d3','eraMavyjeSymubaTyJyNyruBa5eDaUeSebez', data.voice_id ,'5f83f9743a8ad03af54eab4b', (response) => {
+      /*dialer.joinRoom('appid','appkey', data.voice_id ,'roomid', (response) => {
         console.log("play IVR response " + JSON.stringify(response));
       });*/
-      /*dialer.connectBroadCastCall('63746c5004b80100105ed7d3','eraMavyjeSymubaTyJyNyruBa5eDaUeSebez', data.broadcast_id, data.voice_id , connectParams, (response) => {
+      /*dialer.connectBroadCastCall('appid','appkey', data.broadcast_id, data.voice_id , connectParams, (response) => {
         console.log("connectCall Response" + JSON.stringify(response));
       });*/
-      dialer.disconnectBroadCastCall('63746c5004b80100105ed7d3','eraMavyjeSymubaTyJyNyruBa5eDaUeSebez',data.broadcast_id, data.voice_id,(response) => {
+      dialer.disconnectBroadCastCall('appid','appkey',data.broadcast_id, data.voice_id,(response) => {
         console.log(`Disconnect Call Response ${JSON.stringify(response)}`);
       });
     } else if(data.playstate === 'menutimeout' && data.prompt_ref === 'disconnect_prompt') {
       console.log(`disconnect the call`);
-      dialer.disconnectCall('63746c5004b80100105ed7d3','eraMavyjeSymubaTyJyNyruBa5eDaUeSebez',data.voice_id,(response) => {
+      dialer.disconnectCall('appid','appkey',data.voice_id,(response) => {
         console.log(`Disconnect Call Response ${JSON.stringify(response)}`);
       });
     } else if(data.playstate === 'digitcollected') {
