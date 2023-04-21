@@ -1,5 +1,4 @@
 const { EnxDialer } = require('./dialer');
-let user_data = {'name':'Ravi', 'rooms':'6024df4615081f57abba00a3,6024df4615081f57abba00a4,6024df4615081f57abba00a5', 'phone':'12028528186', 'type':'user'};
 var dialer = new EnxDialer('http://127.0.0.1:8444/', user_data);
 /*let connectParams = {
 	host:'https://localhost:8444',
@@ -10,17 +9,11 @@ var dialer = new EnxDialer('http://127.0.0.1:8444/', user_data);
 }
 */
 dialer.init('https://10.100.1.10:8444');
-//dialer.login(user_data);
-//dialer.handleVoiceEvents();
-/*dialer.connectCall({"from":"12028528186", "to":"918088394833", "room":"6024df4615081f57abba00a3"}, (response) => {
-    console.log("Received response " + JSON.stringify(response));
-    if(response.result === 0 && response.state === 'initiated') dialer.cancelCall(response.voice_id);
-});*/
 let params = { 
   name: 'ENABLEX TEST APP', 
   owner_ref: 'enablex', 
-  to: '918088394833', 
-  from: '12028528186', 
+  to: 'called number', 
+  from: 'callerid', 
   auto_record : false, 
   action_on_connect: {  
     play: { 
@@ -30,13 +23,12 @@ let params = {
       prompt_ref: 'welcome_prompt'
     },
     /*room: {
-      room_id : `5f83f9743a8ad03af54eab4b`
+      room_id : `room id `
     },*/
   }
 }
 
-//dialer.makeOutboundCall('63746c5004b80100105ed7d3','eraMavyjeSymubaTyJyNyruBa5eDaUeSebez',params, (response) => {
-dialer.makeOutboundCall('5e707188e865dc5b724b28e2', 'uMeVany7aPapetamy8uZyMeSuSymyeytaJaN', params,(response) => {
+dialer.makeOutboundCall('appid','appkey',params, (response) => {
   console.log("Received response " + JSON.stringify(response));
 });
 
@@ -71,7 +63,7 @@ dialer.socket.on("callstateevent", function (data) {
     console.log("Dispatching call bridged notification to the app");
     dialer.emit('bridged', data);
     setTimeout(() => {
-      dialer.disconnectCall('63746c5004b80100105ed7d3','eraMavyjeSymubaTyJyNyruBa5eDaUeSebez',data.voice_id,(response) => {
+      dialer.disconnectCall('appid','appkey',data.voice_id,(response) => {
         console.log(`Disconnect Call Response ${JSON.stringify(response)}`);
       });
     }, 10000);
@@ -101,21 +93,21 @@ dialer.socket.on("callstateevent", function (data) {
         prompt_ref: 'disconnect_prompt'
       };*/
       let connectParams = {
-        from : '12028528186',
-        to : '919972972207'
+        from : 'callerid',
+        to : 'callednumber'
       };
-      /*dialer.playIVR('63746c5004b80100105ed7d3','eraMavyjeSymubaTyJyNyruBa5eDaUeSebez', data.voice_id , playParams, (response) => {
+      /*dialer.playIVR('appid','appkey', data.voice_id , playParams, (response) => {
         console.log("play IVR response " + JSON.stringify(response));
       });*/
-      /*dialer.joinRoom('63746c5004b80100105ed7d3','eraMavyjeSymubaTyJyNyruBa5eDaUeSebez', data.voice_id ,'5f83f9743a8ad03af54eab4b', (response) => {
+      /*dialer.joinRoom('appid','appkey', data.voice_id ,'room id', (response) => {
         console.log("play IVR response " + JSON.stringify(response));
       });*/
-      dialer.connectCall('63746c5004b80100105ed7d3','eraMavyjeSymubaTyJyNyruBa5eDaUeSebez', data.voice_id , connectParams, (response) => {
+      dialer.connectCall('appid','appkey', data.voice_id , connectParams, (response) => {
         console.log("connectCall Response" + JSON.stringify(response));
       });
     } else if(data.playstate === 'menutimeout' && data.prompt_ref === 'disconnect_prompt') {
       console.log(`disconnect the call`);
-      dialer.disconnectCall('63746c5004b80100105ed7d3','eraMavyjeSymubaTyJyNyruBa5eDaUeSebez',data.voice_id,(response) => {
+      dialer.disconnectCall('appid','appkey',data.voice_id,(response) => {
         console.log(`Disconnect Call Response ${JSON.stringify(response)}`);
       });
     } else if(data.playstate === 'digitcollected') {
